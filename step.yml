@@ -1,0 +1,48 @@
+title: Ensure Play Store on Android Emulator
+summary: Ensure Play Store is available on Android Emulator
+description: Ensure Play Store is available on Android Emulator
+
+website: https://github.com/godrei/bitrise-step-ensure-play-store-on-android-emulator
+source_code_url: https://github.com/godrei/bitrise-step-ensure-play-store-on-android-emulator
+support_url: https://github.com/godrei/bitrise-step-ensure-play-store-on-android-emulator/issues
+
+type_tags:
+- utility
+
+toolkit:
+  go:
+    package_name: github.com/godrei/bitrise-step-ensure-play-store-on-android-emulator
+
+inputs:
+- emulator_id: emulator
+  opts:
+    title: ID
+    summary: Set the device's ID. (This will be the name under $HOME/.android/avd/)
+    description: Set the device's ID. (This will be the name under $HOME/.android/avd/)
+    is_required: true
+
+- start_command_flags: -camera-back none -camera-front none
+  opts:
+    title: Start AVD command flags
+    summary: Flags used when running the command to start the emulator.
+    description: Flags used when running the command to start the emulator.
+    is_required: false
+
+- headless_mode: "yes"
+  opts:
+    title: Run the emulator in headless mode
+    summary: In headless mode the emulator is not launched in the foreground.
+    description: |-
+      In headless mode the emulator is not launched in the foreground.
+
+      If this input is set, the emulator will not be visible but tests (even the screenshots) will run just like if the emulator ran in the foreground.
+    is_required: true
+    value_options:
+    - "yes"
+    - "no"
+
+outputs:
+- BITRISE_EMULATOR_SERIAL:
+  opts:
+    title: Emulator serial
+    description: Booted emulator serial

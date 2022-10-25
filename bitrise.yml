@@ -1,0 +1,36 @@
+format_version: 4
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+app:
+  envs:
+
+workflows:
+  test:
+    steps:
+    - avd-manager:
+        title: Create and start emulator
+        inputs:
+        - profile: pixel
+        - api_level: 30
+        - abi: arm64-v8a
+        - tag: google_apis_playstore
+    - wait-for-android-emulator:
+        title: Wait for emulator
+    - script:
+        title: Stop emulator
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -x
+            $ANDROID_HOME/platform-tools/adb -s $BITRISE_EMULATOR_SERIAL emu kill
+            $ANDROID_HOME/platform-tools/adb devices
+            # It takes a bit of time for the simulator to exit
+            sleep 5
+            $ANDROID_HOME/platform-tools/adb devices
+    - path::./:
+        title: Ensure Play Store on emulator and start
+    - script:
+        inputs:
+        - content: |
+            #!/bin/bash
+            echo "BITRISE_EMULATOR_SERIAL: $BITRISE_EMULATOR_SERIAL"
